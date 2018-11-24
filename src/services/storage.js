@@ -7,7 +7,7 @@ const storage = {
     return this.defaultValues[name];
   },
   defaultValues: {
-    savedCards: [],
+    savedCards: {},
     lastID: 0
   },
   getNextID: function(){
@@ -16,8 +16,11 @@ const storage = {
     return this.lastID;
   },
   createCard: function(cardData){
-    cardData.id = this.getNextID();
-    this.savedCards.unshift(cardData);
+    let id = 0;
+    id = id++;
+    this.savedCards[id]=cardData;
+
+    console.log(this.cardData);
     this.save("savedCards", this.savedCards);
     return cardData;
   },
@@ -30,7 +33,7 @@ const storage = {
   },
   edit: function(editedData){
     console.log(editedData.id);
-    this.save(savedCards)
+    //this.save(savedCards)
   }
 }
 storage.lastID = storage.getItem("lastID");

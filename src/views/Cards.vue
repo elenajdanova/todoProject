@@ -34,6 +34,7 @@ export default {
   },
   methods:{
     addNewCard(cardData){
+
       this.cards.unshift( Storage.createCard(cardData) );
     },
     deleteCard(id){
