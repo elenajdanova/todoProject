@@ -27,6 +27,10 @@ const storage = {
   delete: function(id){
     this.savedCards = this.savedCards.filter(card => card.id != id)
     this.save("savedCards", this.savedCards);
+  },
+  edit: function(editedData){
+    console.log(editedData.id);
+    this.save(savedCards)
   }
 }
 storage.lastID = storage.getItem("lastID");
