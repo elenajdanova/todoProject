@@ -1,3 +1,5 @@
+import Time from "@/services/time.js";
+
 const storage = {
   getItem: function(name, callback){
     let item = JSON.parse( localStorage.getItem(name) );
@@ -15,7 +17,7 @@ const storage = {
     lastID: 0
   },
   getAllCards(){
-    return [...this.savedCards.values()]; // get array from storage map
+    return [...this.savedCards.values()]; // get array from storage Map
   },
   getNextID: function(){
     this.lastID++;
@@ -24,6 +26,7 @@ const storage = {
   },
   createCard: function(cardData){
     cardData.id = this.getNextID();
+    cardData.creationTime = Time.getDateTime();
     this.savedCards.set(cardData.id, cardData);
     this.save("savedCards", [...this.savedCards]);
     return cardData;
@@ -36,6 +39,7 @@ const storage = {
     this.save("savedCards", [...this.savedCards]);
   },
   edit: function(editedData){
+    editedData.lastEditTime = Time.getDateTime();
     this.savedCards.set(editedData.id, editedData);
     this.save("savedCards", [...this.savedCards]);
   }

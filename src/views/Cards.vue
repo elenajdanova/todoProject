@@ -3,6 +3,7 @@
     <Navigation></Navigation>
     <CreateNewToDo v-on:create-new-card="addNewCard"></CreateNewToDo>
     <ToDoCard v-for="card in cards" :key="card.id" v-bind:title="card.title" v-bind:body="card.body" v-bind:id="card.id"
+        v-bind:creationTime="card.creationTime" v-bind:lastEditTime="card.lastEditTime"
               @delete-card="deleteCard"
               @edit-card="updateEdited">
     </ToDoCard>
