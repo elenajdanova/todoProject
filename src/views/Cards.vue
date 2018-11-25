@@ -26,28 +26,23 @@ export default {
   },
   data: function(){
     return{
-      cards:{}
+      cards:[]
     }
   },
   created(){
-      this.cards = Storage.getItem("savedCards");
+      this.cards = Storage.getAllCards();
   },
   methods:{
     addNewCard(cardData){
-
       this.cards.unshift( Storage.createCard(cardData) );
     },
     deleteCard(id){
       Storage.delete(id);
-      this.cards = Storage.getItem("savedCards");
+      this.cards = Storage.getAllCards();
     },
     updateEdited(editedData){
       Storage.edit(editedData);
-      // console.log(editedData.id + "deleted");
-      // this.deleteCard(editedData.id);
-      // console.log( Storage.getItem("lastID") );
-      // this.addNewCard(editedData);
-      // console.log( Storage.getItem("lastID") + "new" );
+      this.cards = Storage.getAllCards();
     }
   }
 };

@@ -1,14 +1,21 @@
 const storage = {
-  getItem: function(name){
+  getItem: function(name, callback){
     let item = JSON.parse( localStorage.getItem(name) );
     if(item){
+      if (typeof callback === "function") {
+        return callback(item);
+      }
       return item;
-    }
+    };
+
     return this.defaultValues[name];
   },
   defaultValues: {
-    savedCards: {},
+    savedCards: new Map(),
     lastID: 0
+  },
+  getAllCards(){
+    return [...this.savedCards.values()]; // get array from storage map
   },
   getNextID: function(){
     this.lastID++;
@@ -16,26 +23,25 @@ const storage = {
     return this.lastID;
   },
   createCard: function(cardData){
-    let id = 0;
-    id = id++;
-    this.savedCards[id]=cardData;
-
-    console.log(this.cardData);
-    this.save("savedCards", this.savedCards);
+    cardData.id = this.getNextID();
+    this.savedCards.set(cardData.id, cardData);
+    this.save("savedCards", [...this.savedCards]);
     return cardData;
   },
   save: function(name, value){
     localStorage.setItem( name, JSON.stringify(value) );
   },
   delete: function(id){
-    this.savedCards = this.savedCards.filter(card => card.id != id)
-    this.save("savedCards", this.savedCards);
+    this.savedCards.delete(id);
+    this.save("savedCards", [...this.savedCards]);
   },
   edit: function(editedData){
-    console.log(editedData.id);
-    //this.save(savedCards)
+    this.savedCards.set(editedData.id, editedData);
+    this.save("savedCards", [...this.savedCards]);
   }
 }
 storage.lastID = storage.getItem("lastID");
-storage.savedCards = storage.getItem("savedCards");
+storage.savedCards = storage.getItem("savedCards", function(arr){
+  return new Map(arr);
+});
 export default storage;
