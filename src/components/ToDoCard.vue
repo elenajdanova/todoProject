@@ -16,8 +16,8 @@
           <div class="uk-card-footer">
             <div class="uk-grid">
               <div class="uk-text-meta uk-margin-remove-top uk-width-auto">
-                <time v-show="wasntEdited">{{creationTime}}</time>
-                <time v-show="!wasntEdited">{{lastEditTime}}</time>
+                <time v-show="!toggleEditTime">{{creationTime}}</time>
+                <time v-show="toggleEditTime">{{lastEditTime}}</time>
               </div>
               <div class="uk-text-meta uk-margin-remove-top uk-width-expand">
                 <span class="uk-label uk-text-lowercase">one</span>
@@ -84,9 +84,9 @@
     data: function() {
       return{
         isEditing: false,
-        wasntEdited: true,
         editedTitle: "",
-        editedBody: ""
+        editedBody: "",
+        wasEdited: false
       }
   },
   methods:{
@@ -95,13 +95,20 @@
     },
     editCard(){
       this.$emit('edit-card', {title:this.editedTitle, body:this.editedBody, id:this.id, creationTime:this.creationTime});
-      this.wasntEdited = false;
       this.isEditing = false;
     },
     showForm(){
        this.editedTitle= this.title;
        this.editedBody= this.body;
        this.isEditing = true;
+    },
+    toggleEditTime(){
+      if(this.creationTime === this.lastEditTime){
+        this.wasEdited = false
+      } else {
+        this.wasEdited = true
+      }
+      return this.wasEdited;
     }
   }
 

@@ -27,6 +27,7 @@ const storage = {
   createCard: function(cardData){
     cardData.id = this.getNextID();
     cardData.creationTime = Time.getDateTime();
+    cardData.lastEditTime = cardData.creationTime;
     this.savedCards.set(cardData.id, cardData);
     this.save("savedCards", [...this.savedCards]);
     return cardData;
