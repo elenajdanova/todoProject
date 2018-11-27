@@ -26,7 +26,7 @@ export default {
   },
   data: function(){
     return{
-      cards:[]
+      cards:{}
     }
   },
   created(){
@@ -41,8 +41,12 @@ export default {
       this.cards = Storage.getItem("savedCards");
     },
     updateEdited(editedData){
-      this.deleteCard(editedData.id);
-      this.addNewCard(editedData);
+      Storage.edit(editedData);
+      // console.log(editedData.id + "deleted");
+      // this.deleteCard(editedData.id);
+      // console.log( Storage.getItem("lastID") );
+      // this.addNewCard(editedData);
+      // console.log( Storage.getItem("lastID") + "new" );
     }
   }
 };

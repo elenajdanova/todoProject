@@ -2,6 +2,7 @@
   <div class= "todoCard">
     <div class="uk-width-expand uk-flex uk-flex-center uk-margin-top uk-flex">
       <div class="uk-flex uk-flex-column ">
+            <div class="uk-card uk-card-default uk-margin-bottom uk-width-xxlarge">
           <form v-on:submit.prevent="onSubmit">
             <fieldset class="uk-fieldset">
               <div @click="show = !show">
@@ -13,6 +14,7 @@
               </div>
             </fieldset>
           </form>
+      </div>
       </div>
     </div>
   </div>
@@ -38,3 +40,8 @@ export default {
   }
 }
 </script>
+
+<style>
+.uk-align-right{
+  margin-bottom: 0;
+  }</style>

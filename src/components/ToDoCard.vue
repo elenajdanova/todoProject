@@ -16,7 +16,7 @@
           <div class="uk-card-footer">
             <div class="uk-grid">
               <div class="uk-text-meta uk-margin-remove-top uk-width-auto">
-                <time datetime="2018-04-01T19:00">April 01, 2018</time>
+                <time>{{dateTime}}</time>
               </div>
               <div class="uk-text-meta uk-margin-remove-top uk-width-expand">
                 <span class="uk-label uk-text-lowercase">one</span>
@@ -52,7 +52,7 @@
         </div>
         <!-- This part is visible only in editing mode -->
         <form v-show="isEditing">
-          <fieldset class="uk-fieldset">
+          <fieldset class="uk-fieldset uk-card uk-card-default uk-margin-bottom uk-width-xxlarge">
             <div>
               <input v-model="editedTitle"
               class="uk-input" type="text">
@@ -82,7 +82,8 @@
       return{
         isEditing: false,
         editedTitle: "",
-        editedBody: ""
+        editedBody: "",
+        dateTime:""
       }
   },
   methods:{
