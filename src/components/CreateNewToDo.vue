@@ -41,7 +41,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .uk-align-right{
   margin-bottom: 0;
   }</style>
