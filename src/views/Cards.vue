@@ -2,10 +2,11 @@
   <div class="cards">
     <Navigation></Navigation>
     <CreateNewToDo v-on:create-new-card="addNewCard"></CreateNewToDo>
-    <ToDoCard v-for="card in cards" :key="card.id" v-bind:title="card.title" v-bind:body="card.body" v-bind:id="card.id"
+    <ToDoCard v-for="card in cards" :key="card.id" :title="card.title" :body="card.body" :id="card.id"
+        :creationTime="card.creationTime" :lastEditTime="card.lastEditTime"
               @delete-card="deleteCard"
               @edit-card="updateEdited">
-    </ToDoCard>
+    </ToDoCard> <!-- v-bind = :-->
   </div>
 </template>
 
@@ -26,11 +27,11 @@ export default {
   },
   data: function(){
     return{
-      cards:{}
+      cards:[]
     }
   },
   created(){
-      this.cards = Storage.getItem("savedCards");
+      this.cards = Storage.getAllCards();
   },
   methods:{
     addNewCard(cardData){
@@ -38,15 +39,11 @@ export default {
     },
     deleteCard(id){
       Storage.delete(id);
-      this.cards = Storage.getItem("savedCards");
+      this.cards = Storage.getAllCards();
     },
     updateEdited(editedData){
       Storage.edit(editedData);
-      // console.log(editedData.id + "deleted");
-      // this.deleteCard(editedData.id);
-      // console.log( Storage.getItem("lastID") );
-      // this.addNewCard(editedData);
-      // console.log( Storage.getItem("lastID") + "new" );
+      this.cards = Storage.getAllCards();
     }
   }
 };

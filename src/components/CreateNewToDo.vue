@@ -35,13 +35,13 @@ export default {
       this.$emit('create-new-card', {title:this.newTitle, body:this.newBody});
       this.show = false,
       this.newTitle = "",
-      this.newBod = ""
+      this.newBody = ""
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 .uk-align-right{
   margin-bottom: 0;
   }</style>
