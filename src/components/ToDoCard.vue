@@ -20,7 +20,7 @@
                 <time v-show="toggleEditTime">{{lastEditTime}}</time>
               </div>
               <div class="uk-text-meta uk-width-expand">
-                <span v-for="tag in tags" :key="tag.id" :title="tag.tagtext" class="uk-label uk-text-lowercase tags">{{tagtext}}</span>
+                <span v-for="tag in tags" :tagText="tag.tag" class="uk-label uk-text-lowercase tags">{{tag}}</span>
                 <span class="uk-label uk-text-lowercase tags">two</span>
               </div>
               <div class="uk-text-meta uk-margin-remove-top uk-width-auto">
@@ -37,15 +37,15 @@
                 uk-icon="more-vertical"></button>
                 <div uk-dropdown="mode: click">
                   <ul class="uk-nav uk-dropdown-nav">
-                    <li><a @click="changeTags">Add tag</a></li>
+                    <li><a @click="showTagsInput">Add tag</a></li>
                     <!-- This part is visible only in editing tags mode -->
                     <div v-show="isEditingTags" class="uk-margin">
-                      <input v-on:keyup="onTagEnter = true" v-model="enterTag"
+                      <input v-on:keyup="onTagEnter = true" v-model="tag"
                       class="uk-input" type="text" placeholder="Enter tag name">
 
                       <div v-show="onTagEnter" class="uk-position-small uk-position-bottom-left uk-width-expand createBtn">
-                        <a @click="changeTags"
-                        class="uk-icon-link"> Create "{{enterTag}}"</a>
+                        <a @click="addTags"
+                        class="uk-icon-link"> Create "{{tag}}"</a>
                       </div>
                     </div>
                     <!-- END This part is visible only in editing tags mode -->
@@ -93,12 +93,12 @@
     data: function() {
       return{
         isEditing: false,
-        isEditingTags: false,
         editedTitle: "",
         editedBody: "",
         wasEdited: false,
-        enterTag: "",
+        tag: "",
         onTagEnter: false,
+        isEditingTags: false,
         tags: []
       }
   },
@@ -123,8 +123,13 @@
       }
       return this.wasEdited;
     },
-    changeTags(){
+    showTagsInput(){
       this.isEditingTags = true;
+    },
+    addTags(){
+      this.tags.push(this.tag);
+      this.isEditingTags = false;
+      this.tag= "";
     }
   }
 
