@@ -10,48 +10,56 @@
               <h3 class="uk-card-title uk-margin-remove-bottom">{{title}}</h3>
             </div>
           </div>
-          <div class="uk-card-body">
+          <div class="uk-card-body uk-text-left">
             <p>{{body}}</p>
           </div>
-          <div class="uk-card-footer">
+          <div class="uk-card-footer uk-text-left">
             <div class="uk-grid">
-              <div class="uk-text-meta uk-margin-remove-top uk-width-auto">
+              <div class="uk-text-meta uk-width-auto">
                 <time v-show="!toggleEditTime">{{creationTime}}</time>
                 <time v-show="toggleEditTime">{{lastEditTime}}</time>
               </div>
-              <div class="uk-text-meta uk-margin-remove-top uk-width-expand">
-                <span class="uk-label uk-text-lowercase">one</span>
-                <span class="uk-label uk-text-lowercase">two</span>
-                <span class="uk-label uk-text-lowercase">three</span>
+              <div class="uk-text-meta uk-width-expand">
+                <span v-for="tag in tags" :key="tag.id" :title="tag.tagtext" class="uk-label uk-text-lowercase tags">{{tagtext}}</span>
+                <span class="uk-label uk-text-lowercase tags">two</span>
               </div>
               <div class="uk-text-meta uk-margin-remove-top uk-width-auto">
-                <a href="#"
-                class="uk-icon-link uk-margin-small-right uk-text-primary"
+                <a class="uk-icon-link uk-margin-small-right uk-text-primary"
                 uk-icon="icon: check; ratio: 1.5"></a>
                 <a @click="deleteCard"
-                href="#"
                 class="uk-icon-link uk-margin-small-right"
                 uk-icon="icon: trash;"></a>
                 <a @click="showForm"
-                href="#"
                 class="uk-icon-link uk-margin-small-right"
                 uk-icon="file-edit"></a>
                 <button type="button"
                 class="uk-icon-link"
                 uk-icon="more-vertical"></button>
-                <div uk-dropdown>
+                <div uk-dropdown="mode: click">
                   <ul class="uk-nav uk-dropdown-nav">
-                    <li class="uk-active"><a href="#">Active</a></li>
-                    <li><a href="#">Item</a>  </li>
-                    <li class="uk-nav-header">Header</li>
-                    <li><a href="#">Item</a></li>
+                    <li><a @click="changeTags">Add tag</a></li>
+                    <!-- This part is visible only in editing tags mode -->
+                    <div v-show="isEditingTags" class="uk-margin">
+                      <input v-on:keyup="onTagEnter = true" v-model="enterTag"
+                      class="uk-input" type="text" placeholder="Enter tag name">
+
+                      <div v-show="onTagEnter" class="uk-position-small uk-position-bottom-left uk-width-expand createBtn">
+                        <a @click="changeTags"
+                        class="uk-icon-link"> Create "{{enterTag}}"</a>
+                      </div>
+                    </div>
+                    <!-- END This part is visible only in editing tags mode -->
+                    <div v-show="!isEditingTags"> <!-- This part is hidden while editing tags mode -->
+                    <li><a>Item</a></li>
+                    <li><a>Item</a></li>
+                    </div>
                   </ul>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- This part is visible only in editing mode -->
+        <!-- This part is visible only in editing card mode -->
         <form v-show="isEditing">
           <fieldset class="uk-fieldset uk-card uk-card-default uk-margin-bottom uk-width-xxlarge">
             <div>
@@ -66,6 +74,7 @@
             </div>
           </fieldset>
         </form>
+        <!-- END This part is visible only in editing card mode -->
       </div>
     </div>
   </div>
@@ -84,9 +93,13 @@
     data: function() {
       return{
         isEditing: false,
+        isEditingTags: false,
         editedTitle: "",
         editedBody: "",
-        wasEdited: false
+        wasEdited: false,
+        enterTag: "",
+        onTagEnter: false,
+        tags: []
       }
   },
   methods:{
@@ -109,9 +122,31 @@
         this.wasEdited = true
       }
       return this.wasEdited;
+    },
+    changeTags(){
+      this.isEditingTags = true;
     }
   }
 
 }
 
 </script>
+
+<style>
+.uk-dropdown{
+  padding: 20px;
+}
+
+.uk-position-small{
+  margin: 5px 20px;
+}
+
+.tags{
+  margin: 0 1px;
+  border-radius: 10px;
+}
+
+li a:hover  {
+  background-color: #ebebebc4;
+}
+</style>
