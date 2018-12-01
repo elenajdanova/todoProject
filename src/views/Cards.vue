@@ -3,9 +3,10 @@
     <Navigation></Navigation>
     <CreateNewToDo v-on:create-new-card="addNewCard"></CreateNewToDo>
     <ToDoCard v-for="card in cards" :key="card.id" :title="card.title" :body="card.body" :id="card.id"
-        :creationTime="card.creationTime" :lastEditTime="card.lastEditTime"
+        :creationTime="card.creationTime" :lastEditTime="card.lastEditTime" :tags="card.tags" :tagsValue="getTags(card.tags)"
               @delete-card="deleteCard"
-              @edit-card="updateEdited">
+              @edit-card="updateEdited"
+              @add-tag="saveTag">
     </ToDoCard> <!-- v-bind = :-->
   </div>
 </template>
@@ -44,6 +45,18 @@ export default {
     updateEdited(editedData){
       Storage.edit(editedData);
       this.cards = Storage.getAllCards();
+    },
+    saveTag(tagData){
+      Storage.saveTag(tagData);
+    },
+    getTags(tagIDs){
+      let tagsValue = [];
+      for (let pair of Storage.savedTags) {
+        if(tagIDs.indexOf(pair[0]) != -1) {
+          tagsValue.push(pair[1])
+        }
+      }
+      return tagsValue;
     }
   }
 };

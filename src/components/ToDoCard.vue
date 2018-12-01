@@ -20,7 +20,7 @@
                 <time v-show="toggleEditTime">{{lastEditTime}}</time>
               </div>
               <div class="uk-text-meta uk-width-expand">
-                <span v-for="tag in tags" :tagText="tag.tag" class="uk-label uk-text-lowercase tags">{{tag}}</span>
+                <span v-for="tag in tagsValue" class="uk-label uk-text-lowercase tags">{{tag}}</span>
                 <span class="uk-label uk-text-lowercase tags">two</span>
               </div>
               <div class="uk-text-meta uk-margin-remove-top uk-width-auto">
@@ -44,7 +44,7 @@
                       class="uk-input" type="text" placeholder="Enter tag name">
 
                       <div v-show="onTagEnter" class="uk-position-small uk-position-bottom-left uk-width-expand createBtn">
-                        <a @click="addTags"
+                        <a @click="showTags"
                         class="uk-icon-link"> Create "{{tag}}"</a>
                       </div>
                     </div>
@@ -60,7 +60,7 @@
           </div>
         </div>
         <!-- This part is visible only in editing card mode -->
-        <form v-show="isEditing">
+        <form v-show="isEditing" v-on:submit.prevent="editCard">
           <fieldset class="uk-fieldset uk-card uk-card-default uk-margin-bottom uk-width-xxlarge">
             <div>
               <input v-model="editedTitle"
@@ -69,8 +69,7 @@
             <div>
               <textarea v-model="editedBody"
               class="uk-textarea" rows="3"></textarea>
-              <button @click="editCard"
-              class="uk-button uk-button-primary uk-align-right">Save</button>
+              <button class="uk-button uk-button-primary uk-align-right">Save</button>
             </div>
           </fieldset>
         </form>
@@ -88,7 +87,9 @@
       title: String,
       body: String,
       creationTime: String,
-      lastEditTime: String
+      lastEditTime: String,
+      tags: Array,
+      tagsValue: Array
     },
     data: function() {
       return{
@@ -98,8 +99,7 @@
         wasEdited: false,
         tag: "",
         onTagEnter: false,
-        isEditingTags: false,
-        tags: []
+        isEditingTags: false
       }
   },
   methods:{
@@ -107,7 +107,7 @@
       this.$emit('delete-card', this.id);
     },
     editCard(){
-      this.$emit('edit-card', {title:this.editedTitle, body:this.editedBody, id:this.id, creationTime:this.creationTime});
+      this.$emit('edit-card', {title:this.editedTitle, body:this.editedBody, id:this.id, creationTime:this.creationTime, lastEditTime:this.lastEditTime, tags: this.tags});
       this.isEditing = false;
     },
     showForm(){
@@ -126,8 +126,8 @@
     showTagsInput(){
       this.isEditingTags = true;
     },
-    addTags(){
-      this.tags.push(this.tag);
+    showTags(){
+      this.$emit('add-tag', {tagText:this.tag, id:this.id});
       this.isEditingTags = false;
       this.tag= "";
     }

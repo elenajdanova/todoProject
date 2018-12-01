@@ -13,7 +13,9 @@ const storage = {
   },
   defaultValues: {
     savedCards: new Map(),
-    lastID: 0
+    savedTags: new Map(),
+    lastID: 0,
+    lastTagID: 0
   },
   getAllCards() {
     return [...this.savedCards.values()]; // get array from storage Map
@@ -27,6 +29,7 @@ const storage = {
     cardData.id = this.getNextID();
     cardData.creationTime = Time.getDateTime();
     cardData.lastEditTime = cardData.creationTime;
+    cardData.tags = [];
     this.savedCards.set(cardData.id, cardData);
     this.save("savedCards", [...this.savedCards]);
     return cardData;
@@ -42,10 +45,41 @@ const storage = {
     editedData.lastEditTime = Time.getDateTime();
     this.savedCards.set(editedData.id, editedData);
     this.save("savedCards", [...this.savedCards]);
+  },
+  getTagID: function() {
+    this.lastTagID++;
+    this.save("lastTagID", this.lastTagID);
+    return this.lastTagID;
+  },
+  saveTag: function(tagData) {
+    let flag = false;
+    for (let pair of this.savedTags) {
+      if (pair[1] === tagData.tagText) {
+        flag = true;
+        tagData.tagID = pair[0];
+        let info = this.savedCards.get(tagData.id);
+        info.tags.push(tagData.tagID);
+        this.savedCards.set(tagData.id, info);
+      }
+    }
+    if (flag == false) {
+      let currentID = this.getTagID();
+      this.savedTags.set(currentID, tagData.tagText);
+      this.save("savedTags", [...this.savedTags]);
+      let info = this.savedCards.get(tagData.id);
+      info.tags.push(currentID);
+      this.savedCards.set(tagData.id, info);
+    }
+    this.save("savedCards", [...this.savedCards]);
   }
 };
+
 storage.lastID = storage.getItem("lastID");
 storage.savedCards = storage.getItem("savedCards", function(arr) {
+  return new Map(arr);
+});
+storage.lastTagID = storage.getItem("lastTagID");
+storage.savedTags = storage.getItem("savedTags", function(arr) {
   return new Map(arr);
 });
 export default storage;
