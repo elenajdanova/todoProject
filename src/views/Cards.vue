@@ -47,7 +47,7 @@ export default {
       this.cards = Storage.getAllCards();
     },
     saveTag(tagData){
-      Storage.saveTag(tagData);
+      Storage.assignTagToCard(tagData);
     },
     getTags(tagIDs){
       let tagsValue = [];

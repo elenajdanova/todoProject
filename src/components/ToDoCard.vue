@@ -21,7 +21,6 @@
               </div>
               <div class="uk-text-meta uk-width-expand">
                 <span v-for="tag in tagsValue" class="uk-label uk-text-lowercase tags">{{tag}}</span>
-                <span class="uk-label uk-text-lowercase tags">two</span>
               </div>
               <div class="uk-text-meta uk-margin-remove-top uk-width-auto">
                 <a class="uk-icon-link uk-margin-small-right uk-text-primary"

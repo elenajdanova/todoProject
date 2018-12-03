@@ -51,24 +51,26 @@ const storage = {
     this.save("lastTagID", this.lastTagID);
     return this.lastTagID;
   },
-  saveTag: function(tagData) {
+  saveTag: function(cardID, tagID) {
+    let info = this.savedCards.get(cardID);
+    info.tags.push(tagID);
+    this.savedCards.set(cardID, info);
+    return this.savedCards;
+  },
+  assignTagToCard: function(tagData) {
     let flag = false;
     for (let pair of this.savedTags) {
       if (pair[1] === tagData.tagText) {
         flag = true;
         tagData.tagID = pair[0];
-        let info = this.savedCards.get(tagData.id);
-        info.tags.push(tagData.tagID);
-        this.savedCards.set(tagData.id, info);
+        this.saveTag(tagData.id, tagData.tagID);
       }
     }
     if (flag == false) {
       let currentID = this.getTagID();
       this.savedTags.set(currentID, tagData.tagText);
       this.save("savedTags", [...this.savedTags]);
-      let info = this.savedCards.get(tagData.id);
-      info.tags.push(currentID);
-      this.savedCards.set(tagData.id, info);
+      this.saveTag(tagData.id, currentID);
     }
     this.save("savedCards", [...this.savedCards]);
   }
