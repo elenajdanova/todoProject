@@ -37,18 +37,10 @@
                 <div uk-dropdown="mode: click">
                   <ul class="uk-nav uk-dropdown-nav">
                     <li><a @click="showTagsInput">Add tag</a></li>
-                    <!-- This part is visible only in editing tags mode -->
-                    <div v-show="isEditingTags" class="uk-margin">
-                      <input v-on:keyup="onTagEnter = true" v-model="tag"
-                      class="uk-input" type="text" placeholder="Enter tag name">
-
-                      <div v-show="onTagEnter" class="uk-position-small uk-position-bottom-left uk-width-expand createBtn">
-                        <a @click="showTags"
-                        class="uk-icon-link"> Create "{{tag}}"</a>
-                      </div>
-                    </div>
-                    <!-- END This part is visible only in editing tags mode -->
-                    <div v-show="!isEditingTags"> <!-- This part is hidden while editing tags mode -->
+                    <Tags v-show="isEditingTags"
+                          @show-tag="showTag"></Tags>
+                    <!-- This part is hidden while editing tags -->
+                    <div v-show="!isEditingTags">
                     <li><a>Item</a></li>
                     <li><a>Item</a></li>
                     </div>
@@ -79,8 +71,14 @@
 </template>
 
 <script>
+
+import Tags from "@/components/Tags.vue";
+
   export default {
     name: "ToDoCard",
+    components: {
+      Tags
+    },
     props: {
       id: Number,
       title: String,
@@ -96,9 +94,8 @@
         editedTitle: "",
         editedBody: "",
         wasEdited: false,
-        tag: "",
-        onTagEnter: false,
-        isEditingTags: false
+        isEditingTags: false,
+        tag: ""
       }
   },
   methods:{
@@ -123,17 +120,15 @@
       return this.wasEdited;
     },
     showTagsInput(){
-      this.isEditingTags = true;
+      this.isEditingTags = !this.isEditingTags;
     },
-    showTags(){
+    showTag(tagData){
+      this.tag = tagData.tagText;
       this.$emit('add-tag', {tagText:this.tag, id:this.id});
       this.isEditingTags = false;
-      this.tag= "";
     }
   }
-
 }
-
 </script>
 
 <style>
@@ -144,7 +139,6 @@
 .uk-position-small{
   margin: 5px 20px;
 }
-
 .tags{
   margin: 0 1px;
   border-radius: 10px;

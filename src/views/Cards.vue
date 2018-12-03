@@ -24,7 +24,7 @@ export default {
   components: {
     Navigation,
     ToDoCard,
-    CreateNewToDo
+    CreateNewToDo,
   },
   data: function(){
     return{
