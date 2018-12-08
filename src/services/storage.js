@@ -73,6 +73,13 @@ const storage = {
       this.saveTag(tagData.id, currentID);
     }
     this.save("savedCards", [...this.savedCards]);
+  },
+  getAllTags() {
+    let allTags = [];
+    for (let pair of this.savedTags) {
+      allTags.push(pair[1]);
+    }
+    return allTags;
   }
 };
 

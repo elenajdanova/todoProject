@@ -51,9 +51,11 @@ export default {
     },
     getTags(tagIDs){
       let tagsValue = [];
-      for (let pair of Storage.savedTags) {
-        if(tagIDs.indexOf(pair[0]) != -1) {
-          tagsValue.push(pair[1])
+      if(tagIDs){
+        for (let pair of Storage.savedTags) {
+          if(tagIDs.indexOf(pair[0]) != -1) {
+            tagsValue.push(pair[1])
+          }
         }
       }
       return tagsValue;

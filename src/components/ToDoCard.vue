@@ -20,7 +20,10 @@
                 <time v-show="toggleEditTime">{{lastEditTime}}</time>
               </div>
               <div class="uk-text-meta uk-width-expand">
-                <span v-for="tag in tagsValue" class="uk-label uk-text-lowercase tags">{{tag}}</span>
+                <span v-for="tag in tagsValue" class="deleteTag">
+                  <span class="uk-label uk-text-lowercase tags">{{tag}}</span>
+                  <button type="button" class="uk-icon-link deleteBtn" uk-icon="icon: trash;"></button>
+               </span>
               </div>
               <div class="uk-text-meta uk-margin-remove-top uk-width-auto">
                 <a class="uk-icon-link uk-margin-small-right uk-text-primary"
@@ -34,7 +37,7 @@
                 <button type="button"
                 class="uk-icon-link"
                 uk-icon="more-vertical"></button>
-                <div uk-dropdown="mode: click">
+                <div v-show="toggle" uk-dropdown="mode: click">
                   <ul class="uk-nav uk-dropdown-nav">
                     <li><a @click="showTagsInput">Add tag</a></li>
                     <Tags v-show="isEditingTags"
@@ -95,7 +98,8 @@ import Tags from "@/components/Tags.vue";
         editedBody: "",
         wasEdited: false,
         isEditingTags: false,
-        tag: ""
+        tag: "",
+        toggle: true
       }
   },
   methods:{
@@ -125,7 +129,8 @@ import Tags from "@/components/Tags.vue";
     showTag(tagData){
       this.tag = tagData.tagText;
       this.$emit('add-tag', {tagText:this.tag, id:this.id});
-      this.isEditingTags = false;
+      this.showTagsInput();
+      this.toggle = false;
     }
   }
 }
@@ -146,5 +151,12 @@ import Tags from "@/components/Tags.vue";
 
 li a:hover  {
   background-color: #ebebebc4;
+}
+.deleteBtn{
+  display: none;
+}
+
+.deleteTag:hover .deleteBtn{
+  display:inline;
 }
 </style>
