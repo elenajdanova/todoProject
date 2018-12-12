@@ -20,9 +20,11 @@
                 <time v-show="toggleEditTime">{{lastEditTime}}</time>
               </div>
               <div class="uk-text-meta uk-width-expand">
-                <span v-for="tag in tagsValue" class="deleteTag">
-                  <span class="uk-label uk-text-lowercase tags">{{tag}}</span>
-                  <button type="button" class="uk-icon-link deleteBtn" uk-icon="icon: trash;"></button>
+                <span v-for="tag in tagsValue" class="onTag">
+                  <span @click="filterCardsByTeg(tag)" class="uk-label uk-text-lowercase tags">{{tag}}</span>
+                  <button @click="deleteTag(tag)"
+                  type="button" class="uk-icon-link deleteBtn"
+                  uk-icon="icon: trash;"></button>
                </span>
               </div>
               <div class="uk-text-meta uk-margin-remove-top uk-width-auto">
@@ -131,6 +133,12 @@ import Tags from "@/components/Tags.vue";
       this.$emit('add-tag', {tagText:this.tag, id:this.id});
       this.showTagsInput();
       this.toggle = false;
+   },
+    deleteTag(tag){
+      this.$emit('delete-tag', {tagText:tag, id:this.id});
+    },
+    filterCardsByTeg(tagText){
+      this.$emit('filter-cards', tagText)
     }
   }
 }
@@ -156,7 +164,7 @@ li a:hover  {
   display: none;
 }
 
-.deleteTag:hover .deleteBtn{
+.onTag:hover .deleteBtn{
   display:inline;
 }
 </style>

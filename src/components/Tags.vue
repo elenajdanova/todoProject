@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import Storage from "@/services/storage.js";
 
 export default {
   name: "Tags",
@@ -36,7 +35,7 @@ export default {
       this.tag= "";
     },
     filterTags(target){
-      let tagData = Storage.getAllTags();
+      let tagData = this.$storage.getAllTags();
       if(target){
         this.filtered = tagData.filter(function(item) {
           return item.toLowerCase().includes(target.toLowerCase())

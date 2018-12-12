@@ -1,12 +1,18 @@
 <template>
   <div class="cards">
     <Navigation></Navigation>
-    <CreateNewToDo v-on:create-new-card="addNewCard"></CreateNewToDo>
+    <CreateNewToDo v-on:create-new-card="addNewCard" v-show="onFilter"></CreateNewToDo>
+    <div v-show="!onFilter">
+      <h2>Filtered by {{filteredTag}} tag</h2>
+      <button @click="cancelFiltration" type="button">Cancel</button>
+    </div>
     <ToDoCard v-for="card in cards" :key="card.id" :title="card.title" :body="card.body" :id="card.id"
         :creationTime="card.creationTime" :lastEditTime="card.lastEditTime" :tags="card.tags" :tagsValue="getTags(card.tags)"
               @delete-card="deleteCard"
               @edit-card="updateEdited"
-              @add-tag="saveTag">
+              @add-tag="saveTag"
+              @delete-tag="deleteTag"
+              @filter-cards="filterCards">
     </ToDoCard> <!-- v-bind = :-->
   </div>
 </template>
@@ -28,37 +34,51 @@ export default {
   },
   data: function(){
     return{
-      cards:[]
+      cards:[],
+      onFilter: true,
+      filteredTag: ""
     }
   },
   created(){
-      this.cards = Storage.getAllCards();
+      this.cards = this.$storage.getAllCards();
   },
   methods:{
     addNewCard(cardData){
-      this.cards.unshift( Storage.createCard(cardData) );
+      this.cards.unshift( this.$storage.createCard(cardData) );
     },
     deleteCard(id){
-      Storage.delete(id);
-      this.cards = Storage.getAllCards();
+      this.$storage.delete(id);
+      this.cards = this.$storage.getAllCards();
     },
     updateEdited(editedData){
-      Storage.edit(editedData);
-      this.cards = Storage.getAllCards();
+      this.$storage.edit(editedData);
+      this.cards = this.$storage.getAllCards();
     },
     saveTag(tagData){
-      Storage.assignTagToCard(tagData);
+      this.$storage.assignTagToCard(tagData);
     },
     getTags(tagIDs){
       let tagsValue = [];
       if(tagIDs){
-        for (let pair of Storage.savedTags) {
+        for (let pair of this.$storage.savedTags) {
           if(tagIDs.indexOf(pair[0]) != -1) {
             tagsValue.push(pair[1])
           }
         }
       }
       return tagsValue;
+    },
+    deleteTag(tagData){
+      this.$storage.deleteTag(tagData);
+    },
+    filterCards(tagText){
+      this.cards = this.$storage.filterCards(this.$storage.getSavedTagID(tagText));
+      this.onFilter = false;
+      this.filteredTag = tagText;
+    },
+    cancelFiltration(){
+      this.cards = this.$storage.getAllCards();
+      this.onFilter = true;
     }
   }
 };

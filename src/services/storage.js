@@ -74,12 +74,67 @@ const storage = {
     }
     this.save("savedCards", [...this.savedCards]);
   },
-  getAllTags() {
+  getAllTags: function() {
     let allTags = [];
     for (let pair of this.savedTags) {
       allTags.push(pair[1]);
     }
     return allTags;
+  },
+  removeTagFromCard: function(tagID, cardID) {
+    let cardTags = this.savedCards.get(cardID).tags;
+    for (let i = 0; i < cardTags.length; i++) {
+      if (cardTags[i] === tagID) {
+        cardTags.splice(i, 1);
+      }
+    }
+    this.save("savedCards", [...this.savedCards]);
+  },
+  removeTagFromSavedTags: function(tagID) {
+    this.savedTags.delete(tagID);
+    this.save("savedTags", [...this.savedTags]);
+  },
+  deleteTag: function(tagData) {
+    let tagID;
+    for (let pair of this.savedTags) {
+      if (pair[1] === tagData.tagText) {
+        tagID = pair[0];
+      }
+    }
+    let flag = false;
+    this.removeTagFromCard(tagID, tagData.id);
+    this.savedCards.forEach(function(value) {
+      for (let i = 0; i < value.tags.length; i++) {
+        if (value.tags[i] == tagID) {
+          flag = true;
+        }
+      }
+    });
+    if (!flag) {
+      this.removeTagFromSavedTags(tagID);
+    }
+  },
+  getSavedTagID: function(tagText) {
+    let tagID;
+    if (tagText) {
+      for (let pair of this.savedTags) {
+        if (pair[1] === tagText) {
+          tagID = pair[0];
+        }
+      }
+    }
+    return tagID;
+  },
+  filterCards: function(tagID) {
+    let filteredCards = [];
+    this.savedCards.forEach(function(value) {
+      for (let i = 0; i < value.tags.length; i++) {
+        if (value.tags[i] == tagID) {
+          filteredCards.push(value);
+        }
+      }
+    });
+    return filteredCards;
   }
 };
 
