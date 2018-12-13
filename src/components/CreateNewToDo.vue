@@ -44,4 +44,8 @@ export default {
 <style scoped>
 .uk-align-right{
   margin-bottom: 0;
-  }</style>
+  }
+input{
+    font-family: 'Roboto','Open Sans', sans-serif;
+}
+  </style>
