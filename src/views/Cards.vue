@@ -4,7 +4,7 @@
     <CreateNewToDo v-on:create-new-card="addNewCard" v-show="onFilter"></CreateNewToDo>
     <div v-show="!onFilter">
       <h2>Filtered by {{filteredTag}} tag</h2>
-      <button @click="cancelFiltration" type="button">Cancel</button>
+      <a @click="cancelFiltration" class="uk-close uk-close-alt closeBtn" uk-icon="icon: close;"></a>
     </div>
     <ToDoCard v-for="card in cards" :key="card.id" :title="card.title" :body="card.body" :id="card.id"
         :creationTime="card.creationTime" :lastEditTime="card.lastEditTime" :tags="card.tags" :tagsValue="getTags(card.tags)"
@@ -83,3 +83,24 @@ export default {
   }
 };
 </script>
+
+<style>
+
+h2{
+  display: inline-block;
+  font-family: 'Open Sans', 'Roboto', sans-serif;
+}
+.closeBtn {
+  display: inline-block;
+  margin-left:10px;
+
+}
+.uk-close-alt{
+padding: 2px;
+border-radius: 50%;
+background: #fff;
+opacity: 1;
+box-shadow: 0 0 0 1px rgba(0,0,0,.1),0 0 6px rgba(0,0,0,.3);
+}
+
+</style>

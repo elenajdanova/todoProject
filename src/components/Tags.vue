@@ -1,19 +1,20 @@
 <template>
   <div>
-    <!-- This part is visible only in editing tags mode -->
     <div class="uk-margin">
       <input v-on:input="onInputTag" v-model="tag"
       class="uk-input" type="text" placeholder="Enter tag name">
-      <div v-show="onTagEnter"
-            class="uk-position-small uk-position-bottom-left uk-width-expand">
-           <a @click="showTags" class="uk-icon-link">Create "{{tag}}"</a>
-               <ul class="uk-list uk-margin-auto-bottom">
-                <li v-for="match in filtered">
-                  <a @click="addFilteredTag(match)">{{match}}</a></li>
-              </ul>
-      </div>
+      <div v-show="toggleSavedOrNewTag"
+            class="uk-position-small uk-width-expand">
+        <a @click="showTags" class="uk-icon-link uk-position-bottom createBtn">Create "{{tag}}"</a>
+        </div>
+        <div v-show="onTagEnter">
+          <ul class="uk-list uk-margin-auto">
+            <li v-for="match in filtered" class="list" data-uk-button-checkbox>
+              <a @click="addFilteredTag(match)">{{match}}</a>
+            </li>
+          </ul>
+        </div>
     </div>
-    <!-- END This part is visible only in editing tags mode -->
   </div>
 </template>
 
@@ -25,13 +26,13 @@ export default {
     return{
       tag: "",
       onTagEnter: false,
+      savedOrNew: false,
       filtered: Array
     }
   },
   methods:{
     showTags(){
       this.$emit('show-tag', {tagText:this.tag});
-      this.filterTags();
       this.tag= "";
     },
     filterTags(target){
@@ -50,7 +51,24 @@ export default {
     },
     addFilteredTag(match){
       this.$emit('show-tag', {tagText:match});
+    },
+    toggleSavedOrNewTag(){
+      this.savedOrNew == !this.onTagEnter;
     }
   }
 }
 </script>
+<style>
+.createBtn{
+  padding: 5px 5px 5px 20px;
+}
+.createBtn:hover{
+  background-color: #a89d9d33;
+}
+.list a{
+  padding: 2px;
+}
+a{
+  font-family: 'Roboto','Open Sans', sans-serif;
+}
+</style>

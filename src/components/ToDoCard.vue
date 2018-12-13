@@ -7,7 +7,7 @@
         class="uk-card uk-card-default uk-margin-bottom uk-width-xxlarge">
           <div class="uk-card-header">
             <div class="uk-grid-small uk-flex-middle" uk-grid>
-              <h3 class="uk-card-title uk-margin-remove-bottom">{{title}}</h3>
+              <h4 class="uk-card-title uk-margin-remove-bottom">{{title}}</h4>
             </div>
           </div>
           <div class="uk-card-body uk-text-left">
@@ -166,5 +166,12 @@ li a:hover  {
 
 .onTag:hover .deleteBtn{
   display:inline;
+}
+
+h4{
+  font-family: 'Open Sans', 'Roboto', sans-serif;
+}
+p,a,span{
+  font-family: 'Roboto','Open Sans', sans-serif;
 }
 </style>
