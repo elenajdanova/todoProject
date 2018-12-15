@@ -1,6 +1,16 @@
 <template>
-  <div class= "todoCard">
-    <div class="uk-width-expand uk-flex uk-flex-center uk-margin-top uk-flex">
+  <div class="todoCard">
+    <figure class="uk-overlay">
+    <div v-show="isDone" class="check_mark">
+      <div class="sa-icon sa-success animate">
+        <span class="sa-line sa-tip animateSuccessTip"></span>
+        <span class="sa-line sa-long animateSuccessLong"></span>
+        <div class="sa-placeholder"></div>
+        <div class="sa-fix"></div>
+      </div>
+    </div>
+    <figcaption v-bind:class="{'uk-overlay-background': isDone}" class="uk-overlay-panel">
+    <div class="uk-width-expand uk-flex uk-flex-center uk-margin-top uk-flex card">
       <div class="uk-flex uk-flex-column ">
         <div class="uk-margin uk-margin-medium-bottom"></div>
         <div v-show="!isEditing"
@@ -28,7 +38,8 @@
                </span>
               </div>
               <div class="uk-text-meta uk-margin-remove-top uk-width-auto">
-                <a class="uk-icon-link uk-margin-small-right uk-text-primary"
+                <a @click="done"
+                class="uk-icon-link uk-margin-small-right uk-text-primary"
                 uk-icon="icon: check; ratio: 1.5"></a>
                 <a @click="deleteCard"
                 class="uk-icon-link uk-margin-small-right"
@@ -72,6 +83,8 @@
         <!-- END This part is visible only in editing card mode -->
       </div>
     </div>
+  </figcaption>
+    </figure>
   </div>
 </template>
 
@@ -101,7 +114,8 @@ import Tags from "@/components/Tags.vue";
         wasEdited: false,
         isEditingTags: false,
         tag: "",
-        toggle: true
+        toggle: true,
+        isDone: false
       }
   },
   methods:{
@@ -139,16 +153,19 @@ import Tags from "@/components/Tags.vue";
     },
     filterCardsByTeg(tagText){
       this.$emit('filter-cards', tagText)
+    },
+    done(){
+      this.isDone = true;
     }
   }
 }
 </script>
 
 <style>
+
 .uk-dropdown{
   padding: 20px;
 }
-
 .uk-position-small{
   margin: 5px 20px;
 }
@@ -156,22 +173,260 @@ import Tags from "@/components/Tags.vue";
   margin: 0 1px;
   border-radius: 10px;
 }
-
 li a:hover  {
   background-color: #ebebebc4;
 }
 .deleteBtn{
   display: none;
 }
-
 .onTag:hover .deleteBtn{
   display:inline;
 }
-
 h4{
   font-family: 'Open Sans', 'Roboto', sans-serif;
 }
 p,a,span{
   font-family: 'Roboto','Open Sans', sans-serif;
 }
+
+.check_mark {
+  width: 80px;
+  height: 130px;
+  z-index: 200;
+  position:absolute;
+  right: 48%;
+}
+
+.uk-overlay-background{
+  opacity: .5;
+}
+
+.sa-icon {
+  width: 80px;
+  height: 80px;
+  border: 4px solid gray;
+  -webkit-border-radius: 40px;
+  border-radius: 40px;
+  border-radius: 50%;
+  margin: 20px auto;
+  padding: 0;
+  position: relative;
+  box-sizing: content-box;
+}
+
+.sa-icon.sa-success {
+  border-color: #009dd8;
+}
+
+.sa-icon.sa-success::before, .sa-icon.sa-success::after {
+  content: '';
+  -webkit-border-radius: 40px;
+  border-radius: 40px;
+  border-radius: 50%;
+  position: absolute;
+  width: 60px;
+  height: 120px;
+
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.sa-icon.sa-success::before {
+  -webkit-border-radius: 120px 0 0 120px;
+  border-radius: 120px 0 0 120px;
+  top: -7px;
+  left: -33px;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  -webkit-transform-origin: 60px 60px;
+  transform-origin: 60px 60px;
+}
+
+.sa-icon.sa-success::after {
+  -webkit-border-radius: 0 120px 120px 0;
+  border-radius: 0 120px 120px 0;
+  top: -11px;
+  left: 30px;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  -webkit-transform-origin: 0px 60px;
+  transform-origin: 0px 60px;
+}
+
+.sa-icon.sa-success .sa-placeholder {
+  width: 80px;
+  height: 80px;
+  border: 4px solid #009dd8;
+  -webkit-border-radius: 40px;
+  border-radius: 40px;
+  border-radius: 50%;
+  box-sizing: content-box;
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  z-index: 2;
+}
+
+.sa-icon.sa-success .sa-fix {
+  width: 5px;
+  height: 90px;
+
+  position: absolute;
+  left: 28px;
+  top: 8px;
+  z-index: 1;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+.sa-icon.sa-success.animate::after {
+  -webkit-animation: rotatePlaceholder 4.25s ease-in;
+  animation: rotatePlaceholder 4.25s ease-in;
+}
+
+.sa-icon.sa-success {
+  border-color: transparent\9;
+}
+.sa-icon.sa-success .sa-line.sa-tip {
+  -ms-transform: rotate(45deg) \9;
+}
+.sa-icon.sa-success .sa-line.sa-long {
+  -ms-transform: rotate(-45deg) \9;
+}
+
+.animateSuccessTip {
+  -webkit-animation: animateSuccessTip 0.75s;
+  animation: animateSuccessTip 0.75s;
+}
+
+.animateSuccessLong {
+  -webkit-animation: animateSuccessLong 0.75s;
+  animation: animateSuccessLong 0.75s;
+}
+
+@-webkit-keyframes animateSuccessLong {
+  0% {
+    width: 0;
+    right: 46px;
+    top: 54px;
+  }
+  65% {
+    width: 0;
+    right: 46px;
+    top: 54px;
+  }
+  84% {
+    width: 55px;
+    right: 0px;
+    top: 35px;
+  }
+  100% {
+    width: 47px;
+    right: 8px;
+    top: 38px;
+  }
+}
+@-webkit-keyframes animateSuccessTip {
+  0% {
+    width: 0;
+    left: 1px;
+    top: 19px;
+  }
+  54% {
+    width: 0;
+    left: 1px;
+    top: 19px;
+  }
+  70% {
+    width: 50px;
+    left: -8px;
+    top: 37px;
+  }
+  84% {
+    width: 17px;
+    left: 21px;
+    top: 48px;
+  }
+  100% {
+    width: 25px;
+    left: 14px;
+    top: 45px;
+  }
+}
+@keyframes animateSuccessTip {
+  0% {
+    width: 0;
+    left: 1px;
+    top: 19px;
+  }
+  54% {
+    width: 0;
+    left: 1px;
+    top: 19px;
+  }
+  70% {
+    width: 50px;
+    left: -8px;
+    top: 37px;
+  }
+  84% {
+    width: 17px;
+    left: 21px;
+    top: 48px;
+  }
+  100% {
+    width: 25px;
+    left: 14px;
+    top: 45px;
+  }
+}
+
+@keyframes animateSuccessLong {
+  0% {
+    width: 0;
+    right: 46px;
+    top: 54px;
+  }
+  65% {
+    width: 0;
+    right: 46px;
+    top: 54px;
+  }
+  84% {
+    width: 55px;
+    right: 0px;
+    top: 35px;
+  }
+  100% {
+    width: 47px;
+    right: 8px;
+    top: 38px;
+  }
+}
+
+.sa-icon.sa-success .sa-line {
+  height: 5px;
+  background-color: #009dd8;
+  display: block;
+  border-radius: 2px;
+  position: absolute;
+  z-index: 2;
+}
+
+.sa-icon.sa-success .sa-line.sa-tip {
+  width: 25px;
+  left: 14px;
+  top: 46px;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.sa-icon.sa-success .sa-line.sa-long {
+  width: 47px;
+  right: 8px;
+  top: 38px;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
 </style>
